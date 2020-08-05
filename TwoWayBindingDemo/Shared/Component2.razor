@@ -1,0 +1,30 @@
+﻿<h6>
+    Component 2 - with ValueChanged called from an async method.
+</h6>
+
+<p>
+    <button class="btn btn-primary" @onclick="@DecrementValue">Decrement</button>
+    &nbsp;
+    <button class="btn btn-primary" @onclick="@IncrementValue">Increment</button>
+</p>
+
+
+@code {
+    [CascadingParameter] private List<int> CascadingList { get; set; }
+
+    [Parameter] public int Value { get; set; }
+
+    [Parameter] public EventCallback<int> ValueChanged { get; set; }
+
+    private void DecrementValue()
+    {
+        Value--;
+        ValueChanged.InvokeAsync(Value);
+    }
+
+    private void IncrementValue()
+    {
+        Value++;
+        ValueChanged.InvokeAsync(Value);
+    }
+}

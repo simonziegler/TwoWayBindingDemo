@@ -1,0 +1,40 @@
+﻿<h6>
+    Component 1 - with ValueChanged called from the Value property setter. 
+</h6>
+
+<p>
+    <button class="btn btn-primary" @onclick="@DecrementValue">Decrement</button>
+    &nbsp;
+    <button class="btn btn-primary" @onclick="@IncrementValue">Increment</button>
+</p>
+
+
+@code {
+    [CascadingParameter] private List<int> CascadingList { get; set; }
+
+    private int _value;
+    [Parameter] public int Value
+    {
+        get => _value;
+        set
+        {
+            if (value != _value)
+            {
+                _value = value;
+                ValueChanged.InvokeAsync(_value);
+            }
+        }
+    }
+
+    [Parameter] public EventCallback<int> ValueChanged { get; set; }
+
+    private void DecrementValue()
+    {
+        Value--;
+    }
+
+    private void IncrementValue()
+    {
+        Value++;
+    }
+}

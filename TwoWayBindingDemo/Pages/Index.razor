@@ -1,0 +1,43 @@
+﻿@page "/"
+
+<h1>Testing two-way binding with cascading values</h1>
+
+<h3>
+    No cascading values
+</h3>
+
+<Component1 @bind-Value="NoCascadingValue1" />
+<p>Value: @NoCascadingValue1</p>
+
+<Component2 @bind-Value="NoCascadingValue2" />
+<p>Value: @NoCascadingValue2</p>
+
+
+
+<h3 style="margin-top: 3rem;">
+    With cascading values
+</h3>
+
+<CascadingValue Value="@cv">
+    <Component1 @bind-Value="@WithCascadingValue1" />
+    <p style="color: red">Value: @WithCascadingValue1 - this version fails.</p>
+
+    <Component2 @bind-Value="@WithCascadingValue2" />
+    <p>Value: @WithCascadingValue2</p>
+</CascadingValue>
+
+<p style="margin-top: 3rem;">
+    The component that calls <code>ValueChanged</code> from withing the setter for <code>Value</code> fails when enclosed inside a cascaded value.
+    It seems to correctly update <code>Value</code>, however <code>Value</code> then bounces back.
+</p>
+
+
+
+@code {
+    private int NoCascadingValue1 { get; set; } = 0;
+    private int WithCascadingValue1 { get; set; } = 0;
+    private int NoCascadingValue2 { get; set; } = 0;
+    private int WithCascadingValue2 { get; set; } = 0;
+
+    private List<int> cv { get; set; } = new List<int>();
+}
