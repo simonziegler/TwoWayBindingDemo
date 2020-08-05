@@ -26,18 +26,77 @@
     <p>Value: @WithCascadingValue2</p>
 </CascadingValue>
 
-<p style="margin-top: 3rem;">
+<p style="margin: 3rem 0;">
     The component that calls <code>ValueChanged</code> from withing the setter for <code>Value</code> fails when enclosed inside a cascaded value.
     It seems to correctly update <code>Value</code>, however <code>Value</code> then bounces back.
 </p>
 
+@foreach (var item in Record.OrderByDescending(r => r.Timestamp))
+{
+    <p>
+        @item.ComponentName, @item.Value, @item.Timestamp
+    </p>
+}
+
 
 
 @code {
-    private int NoCascadingValue1 { get; set; } = 0;
-    private int WithCascadingValue1 { get; set; } = 0;
-    private int NoCascadingValue2 { get; set; } = 0;
-    private int WithCascadingValue2 { get; set; } = 0;
+    private int _noCascadingValue1 = 0;
+    private int NoCascadingValue1
+    {
+        get => _noCascadingValue1;
+        set
+        {
+            _noCascadingValue1 = value;
+            Record.Add(new ClickRecord() { ComponentName = "Non Cascaded 1", Timestamp = DateTime.Now, Value = value });
+        }
+    }
+
+
+    private int _withCascadingValue1 = 0;
+    private int WithCascadingValue1
+    {
+        get => _withCascadingValue1;
+        set
+        {
+            _withCascadingValue1 = value;
+            Record.Add(new ClickRecord() { ComponentName = "Cascaded 1", Timestamp = DateTime.Now, Value = value });
+        }
+    }
+
+
+    private int _noCascadingValue2 = 0;
+    private int NoCascadingValue2
+    {
+        get => _noCascadingValue2;
+        set
+        {
+            _noCascadingValue2 = value;
+            Record.Add(new ClickRecord() { ComponentName = "Non Cascaded 2", Timestamp = DateTime.Now, Value = value });
+        }
+    }
+
+
+    private int _withCascadingValue12 = 0;
+    private int WithCascadingValue2
+    {
+        get => _withCascadingValue12;
+        set
+        {
+            _withCascadingValue12 = value;
+            Record.Add(new ClickRecord() { ComponentName = "Cascaded 2", Timestamp = DateTime.Now, Value = value });
+        }
+    }
+
 
     private List<int> cv { get; set; } = new List<int>();
+
+
+    private List<ClickRecord> Record { get; set; } = new List<ClickRecord>();
+    private class ClickRecord
+    {
+        public DateTime Timestamp { get; set; }
+        public string ComponentName { get; set; }
+        public int Value { get; set; }
+    }
 }
