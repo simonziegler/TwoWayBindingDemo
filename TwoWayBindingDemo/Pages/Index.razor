@@ -9,6 +9,9 @@
 <Component1 @bind-Value="NoCascadingValue1" />
 <p>Value: @NoCascadingValue1</p>
 
+<Component1a @bind-Value="NoCascadingValue1a" />
+<p>Value: @NoCascadingValue1a</p>
+
 <Component2 @bind-Value="NoCascadingValue2" />
 <p>Value: @NoCascadingValue2</p>
 
@@ -21,6 +24,9 @@
 <CascadingValue Value="@cv">
     <Component1 @bind-Value="@WithCascadingValue1" />
     <p style="color: red">Value: @WithCascadingValue1 - this version fails.</p>
+
+    <Component1a @bind-Value="@WithCascadingValue1a" />
+    <p>Value: @WithCascadingValue1a</p>
 
     <Component2 @bind-Value="@WithCascadingValue2" />
     <p>Value: @WithCascadingValue2</p>
@@ -60,6 +66,30 @@
         set
         {
             _withCascadingValue1 = value;
+            Record.Add(new ClickRecord() { ComponentName = "Cascaded 1", Timestamp = DateTime.Now, Value = value });
+        }
+    }
+
+
+    private int _noCascadingValue1a = 0;
+    private int NoCascadingValue1a
+    {
+        get => _noCascadingValue1a;
+        set
+        {
+            _noCascadingValue1a = value;
+            Record.Add(new ClickRecord() { ComponentName = "Non Cascaded 1", Timestamp = DateTime.Now, Value = value });
+        }
+    }
+
+
+    private int _withCascadingValue1a = 0;
+    private int WithCascadingValue1a
+    {
+        get => _withCascadingValue1a;
+        set
+        {
+            _withCascadingValue1a = value;
             Record.Add(new ClickRecord() { ComponentName = "Cascaded 1", Timestamp = DateTime.Now, Value = value });
         }
     }
