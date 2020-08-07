@@ -1,0 +1,54 @@
+﻿
+@if (CP == null)
+{
+    <h4>No cascading value</h4>
+}
+else
+{
+    <h4>With cascading value</h4>
+}
+<button class="btn btn-primary" @onclick="@ChangeValue">Change value</button>
+Current value: @Value
+
+
+@code {
+    [CascadingParameter] private object CP { get; set; }
+
+    private int _value;
+    [Parameter]
+    public int Value
+    {
+        get => _value;
+        set
+        {
+            Console.WriteLine($"Child: Value set invoked with value = {value}");
+            if (value != _value)
+            {
+                Console.WriteLine($"Child: Value setting. Old value = {_value}");
+                _value = value;
+                Console.WriteLine($"Child: Value set. New value = {_value}");
+                ValueChanged.InvokeAsync(_value);
+                Console.WriteLine($"Child: ValueChanged invoked");
+            }
+        }
+    }
+
+    [Parameter] public EventCallback<int> ValueChanged { get; set; }
+
+    private void ChangeValue()
+    {
+        Value++;
+        Console.WriteLine($"Child: Value changed to {Value}");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine($"Child: OnAfterRender");
+        base.OnAfterRender(firstRender);
+    }
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine($"Child: OnParametersSet");
+        base.OnParametersSet();
+    }
+}

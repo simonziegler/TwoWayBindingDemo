@@ -1,0 +1,34 @@
+﻿@page "/logging"
+
+<h3>Logging</h3>
+
+<p>This page writes messages with <code>Console.WriteLine</code>. Click the button to change the value once, then toggle the cascading value and click the button to change value again.</p>
+
+<button @onclick="@(() => { Console.WriteLine(""); Console.WriteLine("Resetting"); _value = 0; Console.WriteLine($"WithCascadingValue: {!WithCascadingValue}"); WithCascadingValue = !WithCascadingValue; })">Toggle cascading value</button>
+
+@if (WithCascadingValue)
+{
+    <CascadingValue Value="cv">
+        <ForLogging @bind-Value="Value" />
+    </CascadingValue>
+}
+else
+{
+    <ForLogging @bind-Value="Value" />
+}
+
+
+@code {
+    private object cv = new object();
+    private bool WithCascadingValue { get; set; }
+    private int _value;
+    public int Value
+    {
+        get => _value;
+        set
+        {
+            _value = value;
+            Console.WriteLine($"Parent: Value updated to {value}");
+        }
+    }
+}
